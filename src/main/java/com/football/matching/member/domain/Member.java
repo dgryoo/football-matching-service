@@ -3,19 +3,30 @@ package com.football.matching.member.domain;
 import com.football.matching.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(
+        name = "member",
+        indexes = {
+                @Index(name = "idx_member_email", columnList = "email"),
+                @Index(name = "idx_member_uuid", columnList = "uuid")
+        }
+)
+@EqualsAndHashCode(of = {"id"})
 public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String uuid;
 
     private String email;
 
@@ -31,6 +42,7 @@ public class Member extends BaseEntity {
         validatePassword(password);
         validateNickname(nickname);
 
+        this.uuid = UUID.randomUUID().toString();
         this.email = email;
         this.password = password;
         this.nickname = nickname;

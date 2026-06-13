@@ -19,14 +19,6 @@ public class MemberController {
         this.memberQueryService = memberQueryService;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public MemberResponse registerMember(@Valid @RequestBody RegisterMemberRequest memberRequest) {
-        Member member = memberCommandService.register(memberRequest.email(), memberRequest.password(),
-                memberRequest.nickname());
-        return MemberResponse.from(member);
-    }
-
     @GetMapping("{memberId}")
     @ResponseStatus(HttpStatus.OK)
     public MemberResponse findMemberById(@PathVariable Long memberId) {

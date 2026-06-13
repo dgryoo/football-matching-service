@@ -3,25 +3,29 @@ package com.football.matching.member.application;
 
 import com.football.matching.common.exception.BadRequestException;
 import com.football.matching.common.exception.NotFoundException;
+import com.football.matching.common.exception.UnauthorizedException;
 import com.football.matching.member.domain.Member;
 import com.football.matching.member.domain.MemberRepository;
 import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberCommandService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public MemberCommandService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
 
     public Member register(String email, String password, String nickname) {
         validateDuplicateEmail(email);
 
-        Member member = Member.register(email, password, nickname);
+        String encodedPassword = passwordEncoder.encode(password);
+        Member member = Member.register(email, encodedPassword, nickname);
         return memberRepository.save(member);
     }
 
