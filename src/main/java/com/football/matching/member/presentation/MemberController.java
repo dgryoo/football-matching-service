@@ -14,7 +14,7 @@ public class MemberController {
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
 
-    public MemberController(MemberCommandService memberCommandService,  MemberQueryService memberQueryService) {
+    public MemberController(MemberCommandService memberCommandService, MemberQueryService memberQueryService) {
         this.memberCommandService = memberCommandService;
         this.memberQueryService = memberQueryService;
     }
@@ -22,7 +22,8 @@ public class MemberController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MemberResponse registerMember(@Valid @RequestBody RegisterMemberRequest memberRequest) {
-        Member member = memberCommandService.register(memberRequest.email(), memberRequest.password(), memberRequest.nickname());
+        Member member = memberCommandService.register(memberRequest.email(), memberRequest.password(),
+                memberRequest.nickname());
         return MemberResponse.from(member);
     }
 
@@ -35,9 +36,8 @@ public class MemberController {
 
     @PatchMapping("{memberId}")
     @ResponseStatus(HttpStatus.OK)
-    public MemberResponse changeNickName(
-            @PathVariable Long memberId,
-            @RequestBody ChangeNickNameRequest changeNickNameRequest) {
+    public MemberResponse changeNickName(@PathVariable Long memberId,
+                                         @RequestBody ChangeNickNameRequest changeNickNameRequest) {
         memberCommandService.changeNickname(memberId, changeNickNameRequest.nickName());
         Member member = memberQueryService.findByIdOrElseThrow(memberId);
         return MemberResponse.from(member);
@@ -45,9 +45,7 @@ public class MemberController {
 
     @PatchMapping("{memberId}/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changePassword(
-            @PathVariable Long memberId,
-            @RequestBody ChangePasswordRequest changePasswordRequest) {
+    public void changePassword(@PathVariable Long memberId, @RequestBody ChangePasswordRequest changePasswordRequest) {
         memberCommandService.changePassword(memberId, changePasswordRequest.password());
     }
 

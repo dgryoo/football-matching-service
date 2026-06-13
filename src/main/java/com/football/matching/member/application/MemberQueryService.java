@@ -1,5 +1,6 @@
 package com.football.matching.member.application;
 
+import com.football.matching.common.exception.NotFoundException;
 import com.football.matching.member.domain.Member;
 import com.football.matching.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class MemberQueryService {
 
     public Member findByIdOrElseThrow(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("회원을 찾을 수 없습니다.", null, null));
     }
 
     public Member findByEmailOrElseNull(String email) {
@@ -30,6 +31,6 @@ public class MemberQueryService {
 
     public Member findByEmailOrElseThrow(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("회원을 찾을 수 없습니다.", null, null));
     }
 }

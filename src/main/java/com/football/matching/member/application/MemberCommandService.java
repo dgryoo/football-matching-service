@@ -1,6 +1,8 @@
 package com.football.matching.member.application;
 
 
+import com.football.matching.common.exception.BadRequestException;
+import com.football.matching.common.exception.NotFoundException;
 import com.football.matching.member.domain.Member;
 import com.football.matching.member.domain.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -39,14 +41,13 @@ public class MemberCommandService {
     }
 
     private void validateDuplicateEmail(String email) {
-        if (memberRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
-        }
+        if (memberRepository.existsByEmail(email)) throw new BadRequestException("이미 존재하는 이메일입니다.", null, null);
     }
 
     private Member findByIdOrElseThrow(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        return memberRepository
+                .findById(memberId)
+                .orElseThrow(() -> new NotFoundException("회원을 찾을 수 없습니다.", null, null));
     }
 
 }
